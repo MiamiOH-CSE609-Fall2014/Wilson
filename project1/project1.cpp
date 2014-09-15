@@ -29,4 +29,34 @@ int main() {
   }
 
 
+  for (int n = 0; n < firstMatrixValues.size(); n++){
+    if (n%colFirstMatrix != 0){ 
+      cout<< firstMatrixValues.at(n)<< " ";
+    }
+    else if (n%colFirstMatrix == 0) {
+      cout<<"\n"<<firstMatrixValues.at(n)<< " ";
+    }
+    else {
+      cout<<firstMatrixValues.at(n)<< " ";
+    }
+   
+  }
+  cout<<"\n";
+  
+
+
+  for (int n = 0; n <secondMatrixValues.size(); n++){
+    if (n%colSecondMatrix != 0){ 
+      cout<< secondMatrixValues.at(n)<< " ";
+    }
+    else if (n%colSecondMatrix == 0) {
+      cout<<"\n"<<secondMatrixValues.at(n)<< " ";
+    }
+    else {
+      cout<<secondMatrixValues.at(n)<< " ";
+    }
+   
+  }
+  cout<<"\n";
+
 }
