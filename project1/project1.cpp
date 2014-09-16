@@ -59,4 +59,41 @@ int main() {
   }
   cout<<"\n";
 
-}
+  if (colFirstMatrix != rowsSecondMatrix){
+    cout<<"Invalid Input"<<endl;
+    cout<<"1"<<endl;
+  }
+
+
+  int rowsFinalMatrix = rowsFirstMatrix;
+  int colFinalMatrix = colSecondMatrix;
+  int finalMatrixSize = rowsFinalMatrix*colFinalMatrix;
+
+  for (int n = 0; n < finalMatrixSize; n++){
+    if (n%colFinalMatrix != 0){
+      double entry = 0;
+      for (int m = 0; m <= colFirstMatrix; m++)
+	entry += (firstMatrixValues.at(m)*secondMatrixValues.at(m));
+      
+      cout<< entry<< " ";
+    }
+    else if (n%colFinalMatrix == 0){
+      double entry = 0;
+      for (int m = 0; m <= colFirstMatrix; m++)
+	entry += (firstMatrixValues.at(m)*secondMatrixValues.at(m));
+      
+      cout<<"\n"<<entry<<" ";
+    }
+    else {
+      double entry = 0;
+      for (int m = 0; m <= colFinalMatrix; m++)
+	entry += (firstMatrixValues.at(m)*secondMatrixValues.at(m));
+      
+      cout<<entry<< " ";
+    }
+  }
+  cout<< colFirstMatrix;
+
+
+
+    }
