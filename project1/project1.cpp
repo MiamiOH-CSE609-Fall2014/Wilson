@@ -58,42 +58,30 @@ int main() {
    
   }
   cout<<"\n";
-
+  
   if (colFirstMatrix != rowsSecondMatrix){
     cout<<"Invalid Input"<<endl;
     cout<<"1"<<endl;
   }
+  
+  else {
+ 
+  vector<int>finalMatrix;
 
-
-  int rowsFinalMatrix = rowsFirstMatrix;
-  int colFinalMatrix = colSecondMatrix;
-  int finalMatrixSize = rowsFinalMatrix*colFinalMatrix;
-
-  for (int n = 0; n < finalMatrixSize; n++){
-    if (n%colFinalMatrix != 0){
-      double entry = 0;
-      for (int m = 0; m <= colFirstMatrix; m++)
-	entry += (firstMatrixValues.at(m)*secondMatrixValues.at(m));
-      
-      cout<< entry<< " ";
-    }
-    else if (n%colFinalMatrix == 0){
-      double entry = 0;
-      for (int m = 0; m <= colFirstMatrix; m++)
-	entry += (firstMatrixValues.at(m)*secondMatrixValues.at(m));
-      
-      cout<<"\n"<<entry<<" ";
-    }
-    else {
-      double entry = 0;
-      for (int m = 0; m <= colFinalMatrix; m++)
-	entry += (firstMatrixValues.at(m)*secondMatrixValues.at(m));
-      
-      cout<<entry<< " ";
+  for (int i = 0; i < rowsFirstMatrix; i++){
+    for (int j = 0; j < colSecondMatrix; j++){
+      int sum = 0;
+      for (int k = 0; k < rowsSecondMatrix; k++) 
+	sum = sum + firstMatrixValues.at(i*colFirstMatrix+k)*secondMatrixValues.at(k*colSecondMatrix+j);
+      if (j%colSecondMatrix == 0){ 
+	cout<<'\n'<<sum<<' ';
+      }
+      else {
+	cout<<sum<<' '; 
+      }
     }
   }
-  cout<< colFirstMatrix;
-
-
-
-    }
+  cout<<'\n';
+  }
+  
+}
