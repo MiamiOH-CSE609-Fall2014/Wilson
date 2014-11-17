@@ -9,8 +9,7 @@
 using namespace std;
 
 // Declare global variables
-string header;
-vector<string> comments;
+
 string sequence;
 int num_seq;
 vector<string> combinations = {"AA","AG","AC","AT","GA","GG","GC","GT","CA","CG","CC","CT","TA","TG","TC","TT"};
@@ -102,6 +101,8 @@ tuple<int,int,string> highScore = findHighScore(sequence,seqs,scoring_m);
 
 tuple<string,vector<string>,string>parseFastaFile(string filepath) {
 string temp ;
+string header;
+vector<string> comments;
   ifstream myfile(filepath);
 
   while(myfile.good()) {
@@ -192,9 +193,9 @@ vector<vector<int>> scoringMatrix(4,vector<int>(4));
   for (int i = 0; i < 4; i++) {
     getline(myfile,temp);
     for (int j = 0; j < 4; j++) {
-      scoringMatrix[i][j] = temp.at(0);
+      scoringMatrix[i][j] = atoi(temp.substr(0,1).c_str());
       if (j > 3 || j < 3) {
-	temp = temp.substr(temp.find(",")+1);
+      temp = temp.substr(temp.find(",")+1);
       }
     }
   }
