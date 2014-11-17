@@ -189,11 +189,10 @@ vector <vector<int>> parseScoringFile(string filepath) {
 ifstream myfile(filepath);
  
 vector<vector<int>> scoringMatrix(4,vector<int>(4));
-//vector<vector<int>> scoringMatrix;
   for (int i = 0; i < 4; i++) {
     getline(myfile,temp);
     for (int j = 0; j < 4; j++) {
-      scoringMatrix[i][j] = atoi(temp.substr(0,1).c_str());
+      scoringMatrix[i][j] = temp.at(0);
       if (j > 3 || j < 3) {
 	temp = temp.substr(temp.find(",")+1);
       }
