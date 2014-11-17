@@ -108,22 +108,15 @@ string temp ;
     getline(myfile,temp);
     if (temp.length() > 0) {
       if (temp.at(0)=='>') {
-	header = "('" + temp + "',";
+	header = temp;
       }
       else if (temp.at(0)==';') {
-	string comment;
-	if (comments.size() == 0) {
-	  comment = "['" + temp; 
-	}
-	else {
-	  comment = "'" + temp;
- 	}
-	comments.push_back(comment);
+	comments.push_back(temp);
       }
       else {
 	sequence = sequence + temp;
       }
-    }
+     }
   } 
  
   return  make_tuple(header,comments,sequence);
@@ -134,21 +127,25 @@ string temp ;
 // This method takes a string and returns a map of scores that the number of occurances of each digram in the string
 map<string, int> digramFreqScores(string s) {
   map<string,int> scores;
+  int count = 0;
+  int ix = 0;
+  string temp = s;
+
   for (int i = 0; i < combinations.size(); i++) {
-    string temp = s;
-    int count = 0;
-    int ix = 0; 
     while(true) {
       ix = temp.find(combinations[i]);
-      if (ix == string::npos) {
-	break;
-      }
-      else {
-	temp.replace(ix,1,"x");
-	count = count + 1; 
-      }
+      if (ix != string::npos) {
+	temp.replace(ix,1,"/");
+	count = count + 1;
+            }
+    else {
+	break; 
+	 }
     }
     scores[combinations[i]]=count;
+    count = 0;
+    ix = 0;
+    temp = s;
   }
   return scores;
 }
@@ -157,16 +154,31 @@ map<string, int> digramFreqScores(string s) {
 // Method called digramFreqMatrix
 // This method takes the map created by digramFreqScores and converts it to a matrix
 vector<vector<int>> digramFreqMatrix (map<string,int> d) {
-  vector<vector<int>> m(4,vector<int>(4));
-  typedef map<string,int>::iterator it;
+  int count; 
+  vector<vector<int>> m;
+  vector<int> chunk1;
+  vector<int> chunk2;
+  vector<int> chunk3;
+  vector<int> chunk4;
+ 
+  for (int i = 0; i < 4; i++) {
+    chunk1.push_back(d[combinations[i]]);
+  }
+  m.push_back(chunk1);
+  for (int i = 4; i < 8; i++) {
+    chunk2.push_back(d[combinations[i]]);
+  }
+  m.push_back(chunk2);
+  for (int i = 8; i < 12; i++) {
+	chunk3.push_back(d[combinations[i]]);
+  }
+  m.push_back(chunk3);
+     
+  for (int i = 12; i < 16; i++) {
+    chunk4.push_back(d[combinations[i]]);
+  }
+  m.push_back(chunk4);
 
-  for (int i = 0; i < combinations.size(); i++ ) {
-    for (it iter=d.begin(); iter != d.end(); iter++) {
-	if ((iter->first) == combinations[i] ) {
-	  m[i/4][i%4] = iter->second;
-	}
-      }
-    }
 	 return m;
        }
 
@@ -176,13 +188,12 @@ vector <vector<int>> parseScoringFile(string filepath) {
    string temp;
 ifstream myfile(filepath);
  
-  vector<vector<int>> scoringMatrix(5,vector<int>(4));
-
+vector<vector<int>> scoringMatrix(4,vector<int>(4));
+//vector<vector<int>> scoringMatrix;
   for (int i = 0; i < 4; i++) {
     getline(myfile,temp);
     for (int j = 0; j < 4; j++) {
       scoringMatrix[i][j] = atoi(temp.substr(0,1).c_str());
-      //scoringMatrix[i][j] = temp.substr(0,1);
       if (j > 3 || j < 3) {
 	temp = temp.substr(temp.find(",")+1);
       }
@@ -199,29 +210,17 @@ pair<int,int> scoreSequence(string haystack,string needle, vector<vector<int>> s
   int highScorerIx = 0;
   int currentScore;
   string substring;
+  map<char,int> scores = {{'A',0},{'G',1},{'C',2},{'T',3}};
 
     for (int i = 0; i < haystack.length()-needle.length()+1; i++) {
       currentScore = 0;
+      substring = haystack.substr(i,needle.length());
       for (int j = 0; j < needle.length(); j++) {
-	//substring = haystack.substr(i,needle.length());
-	string hayPiece (1,haystack.at(i+j));
-	string needPiece (1,needle.at(j));
-	substring = needPiece+hayPiece;
-	//substring = needle.substr(1,j) + haystack.substr(1,(i+j));
-     
-	for (int k = 0; k < combinations.size(); k++) {
-	  if (substring == combinations[k] ){
-	    currentScore = currentScore + scoring_m[k/4][k%4];
-	  k = combinations.size();
-	}
-      }
-    }
-      
+	currentScore = currentScore + scoring_m[scores[substring[j]]][scores[needle[j]]];
+      }   
 	if(currentScore > highScorer) {
 	highScorer = currentScore;
 	highScorerIx = i;
-
-
     }
   }
     return make_pair(highScorerIx,highScorer);
