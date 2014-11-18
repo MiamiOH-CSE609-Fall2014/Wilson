@@ -8,7 +8,7 @@
 #include <tuple>
 using namespace std;
 
-// Declare global variables
+// Declare global variables.
 
 string sequence;
 int num_seq;
