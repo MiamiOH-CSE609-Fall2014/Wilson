@@ -1,0 +1,147 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <stdexcept>
+#include <math.h>
+#include <stdio.h>
+
+using namespace std;
+
+vector<string> names;
+vector<float> grades;
+
+void getNamesGrades() {
+
+  string name;
+  float grade;
+  string null;
+
+  while(true) {
+    try{
+      cout << "Enter Student's Name (enter 'none' to quit): " << endl;
+      getline(cin,name);
+      if (name.compare("none") == 0) {
+	break;
+      }
+      cout << "Enter Student's Grade: "<< endl;
+      cin>>grade;
+      getline(cin,null);
+      
+      if (grade > 100 || grade < 0) {
+	throw out_of_range("Invalid grade entry (grades must be between 0% and 100%)");
+      getline(cin,null);
+      }
+      
+      names.push_back(name);
+      grades.push_back(grade);
+    }
+      catch(out_of_range e) {
+	cout<<e.what()<<endl;
+      }
+  
+ 
+    
+  }
+}
+
+
+float getMean(vector<float>nums) {
+  float sum = 0;
+  float mean;
+  for (int n = 0; n < nums.size(); n++) {
+    sum = sum + nums.at(n);
+  }
+  return sum/(nums.size());
+
+}
+
+float getStd(vector<float>nums) {
+  float temp = 0;
+  float std;
+  for (int n = 0; n < nums.size(); n++) {
+    temp = temp +  pow(nums.at(n)-getMean(nums),2);
+  }
+  std = sqrt(temp/nums.size());
+ 
+  return std;
+
+
+
+}
+
+float getArange(float mean, float std) {
+  float acutoff = mean + (1.5*std);
+  if (acutoff > 100) {
+    acutoff = 100.00;
+  }
+  return acutoff;
+}
+
+float getBrange(float mean, float std) {
+  float bcutoff = mean+(0.5*std);
+  return bcutoff;
+}
+
+float getCrange(float mean, float std) {
+  float ccutoff = mean-(0.5*std);
+  return ccutoff;
+}
+
+float getDrange(float mean, float std) {
+  float dcutoff  = mean-(1.5*std);
+  return dcutoff;
+}
+
+
+
+
+int main() {
+
+
+  getNamesGrades();
+  float mymean = getMean(grades);
+  float std = getStd(grades);
+  float acut = getArange(mymean,std);
+  float bcut = getBrange(mymean,std);
+  float ccut = getCrange(mymean,std);
+  float dcut = getDrange(mymean,std);
+
+
+  printf("\n\n\n-------------------\nGrading Scale\n\n A above %2.1f%%\n B %2.1f%% - %2.1f%%\n C %2.1f%% - %2.1f%%\n D %2.1f%% - %2.1f%%\n F below %2.1f%%\n", acut, bcut, acut, ccut, bcut,dcut, ccut,dcut);
+
+  vector<string> letterGrades;
+
+  for (int n = 0; n < grades.size(); n++) {
+    if (grades.at(n) >= acut) {
+      letterGrades.push_back("A");
+  }
+    else if (grades.at(n) < acut && grades.at(n) >= bcut) {
+      letterGrades.push_back("B");
+    }
+
+    else if (grades.at(n) < bcut && grades.at(n) >= ccut) {
+      letterGrades.push_back("C");
+    }
+
+    else if (grades.at(n) < ccut && grades.at(n) >= dcut) {
+      letterGrades.push_back("D");
+    }
+
+    else if (grades.at(n) < dcut) {
+      letterGrades.push_back("F");
+    }
+  }
+
+ 
+
+  printf("\n\n\n%-20s%-10s%-10s\n", "Name","Score","Grade");
+  
+
+  for (int n = 0; n <  names.size(); n++) {
+    printf("\n%-20s%-10.1f%-10s\n",names.at(n).c_str(),grades.at(n),letterGrades.at(n).c_str());
+  }
+
+  printf("\n\n\nClass average = %.2f%%\n\n",mymean);
+  printf("Standard Deviation = %.2f\n-------------------\n\n\n",std);
+  
+}
